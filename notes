@@ -1,0 +1,2 @@
+lexer goes through input character by character to break up list into tokens
+tokens are objects that have a type and an optional value
