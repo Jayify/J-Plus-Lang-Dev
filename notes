@@ -2,3 +2,8 @@ lexer goes through input character by character to break up list into tokens
 tokens are objects that have a type and an optional value
 illegal character is the standard error name used when a lexer comes across a char that isn't supported
 super() allows access to super classes methods(I think), such as super().__init__(args) to call super's init
+
+BUILT IN COLOR:
+https://stackabuse.com/how-to-print-colored-text-in-python/
+'\033[0;31;43m CHEESY \033[0;0m'
+escape code[style;text colour;bg colour m "text" reset pattern
