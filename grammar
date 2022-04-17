@@ -1,0 +1,9 @@
+# | = or, * = 0 or more
+
+expr    : term ((PLUS|MINUS) term)*
+
+term    : factor ((MUL|DIV) factor)*
+
+factor  : INT|FLOAT
+				: (PLUS|MINUS) factor
+				: LPAREN expr RPAREN
