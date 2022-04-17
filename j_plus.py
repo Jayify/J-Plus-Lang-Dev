@@ -36,7 +36,7 @@ class Position:
         self.fn = fn
         self.ftxt = ftxt
 
-    def advance(self, current_char):
+    def advance(self, current_char=None):
         self.index += 1
         self.column += 1
 
@@ -87,9 +87,9 @@ class Lexer:
         self.pos.advance(self.current_char)
         self.current_char = self.text[self.pos.index] if self.pos.index < len(self.text) else None
 
+
     def make_tokens(self):
         # returns token, None if valid char, returns [], error if invalid char
-
         tokens = []
 
         while self.current_char != None:
@@ -148,10 +148,80 @@ class Lexer:
             return Token(TT_FLOAT, float(num_str))
 
 
+# -------------- NODES ---------------
+
+class NumberNode:
+    def __init__(self, token):
+        self.token = token
+
+    def __repr__(self):
+        return f"{self.token}"
+
+
+class BinOpNode:
+    # binary operation node
+    def __init__(self, left_node, op_token, right_node):
+        self.left_node = left_node
+        self.op_token = op_token
+        self.right_node = right_node
+
+    def __repr__(self):
+        return f"({self.left_node}, {self.op_token}, {self.right_node})"
+
+
+# -------------- PARSER ---------------
+
+class Parser:
+    def __init__(self, tokens):
+        self.tokens = tokens
+        self.tkn_index = -1
+        self.advance()
+
+    def advance(self):
+        self.tkn_index += 1
+        if self.tkn_index < len(self.tokens):
+            self.current_tkn = self.tokens[self.tkn_index]
+        return self.current_tkn
+
+    def parse(self):
+        res = self.expr()
+        return res
+
+    # grammar rules
+    def factor(self):
+        token = self.current_tkn
+        if token.type in (TT_INT, TT_FLOAT):
+            self.advance()
+            return NumberNode(token)
+
+    def term(self):
+        return self.bin_op(self.factor, (TT_MUL, TT_DIV))
+
+    def expr(self):
+        return self.bin_op(self.term, (TT_PLUS, TT_MINUS))
+
+    def bin_op(self, func, ops):
+        left = func()
+
+        while self.current_tkn.type in ops:
+            op_tkn = self.current_tkn
+            self.advance()
+            right = func()
+            left = BinOpNode(left, op_tkn, right)
+        return left
+
+
 # -------------- RUN ---------------
 
 def run(fn, text):
+    # Generate tokens
     lexer = Lexer(fn, text)
     tokens, error = lexer.make_tokens()
-    return tokens, error
+    if error:
+        return None, error
+    # generate abstract syntax tree (AST)
+    parser = Parser(tokens)
+    ast = parser.parse()
+    # return tokens, error
+    return ast, None
 
