@@ -23,3 +23,5 @@ This language is designed to supply the basic functionality of a programming lan
 As I am new to building programming languages, I am following tutorials to assist me.
 CodePulses's YouTube series was the main tutorial I used.
 https://www.youtube.com/watch?v=Eythq9848Fg.
+
+This includes CodePulse's arrow error module (strings_with_arrows).
