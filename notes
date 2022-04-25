@@ -13,3 +13,5 @@ escape code[style;text colour;bg colour m "text" reset pattern
 
 
 repr stands for representation
+res means result or response
+EOF means end of file
